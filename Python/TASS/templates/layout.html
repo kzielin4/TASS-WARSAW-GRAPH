@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Google API Example</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='script4.js') }}"></script>
+  </head>
+  <body>
+    <p id="mainHeader"> Select start and end point of destination</p>
+    <input type="text" title="From" id="queryFrom" placeholder="From...">
+    <input type="text" title="To" id="queryTo" placeholder="To..">
+    <button id="search">Search</button>
+
+    <p id="errorMessage"></p>
+    <p><a href="" id="url" target="_blank">Click for result!</a></p>
+<div>
+<a href="/przystanki.txt">Lista przystankow</a></div>
+</object>
+
+
+
+  </body>
+</html>
