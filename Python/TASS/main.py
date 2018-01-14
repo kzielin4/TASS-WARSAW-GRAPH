@@ -175,7 +175,7 @@ def getTheBestTransportMode(stopFrom, stopTo):
         transitLength, transitPath = nx.bidirectional_dijkstra(gTransitD, stopFrom.lower(), stopTo.lower())
         print "trans Len: " + str(transitLength)
         print "trans path: " + str(transitPath)
-        if(transitLength <= carLength):
+        if(transitLength <= carLength*1.2):
             mode = {"vehicle": "transport miejski", 'length': transitLength, "path": transitPath}
         else:
             mode = {"vehicle": "samochod", 'length': carLength, "path": carPath}
