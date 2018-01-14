@@ -1,4 +1,40 @@
+body{
+    text-align: center;
+}
+#app{
+    margin-top: 50px;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    margin-left: 50px;
+    padding-top:50px
+}
+
 #mainHeader {
-    background-color: yellow;
     font-size: 200%;
+}
+#errorMessage{
+    color:red;
+}
+#fromToContainer{
+    padding-top: 50px;
+    padding-bottom: 40px;
+}
+#queryToLabel{
+    padding-left: 50px;
+}
+#przystanki{
+    padding-top: 100px;
+}
+#search{
+    margin-left: 30px;
+}
+#list{
+    margin-top: 50px;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    margin-left: 50px;
+    padding-top:50px
+}
+#vehicle{
+    font-weight: bold;
 }

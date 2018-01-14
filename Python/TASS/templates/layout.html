@@ -1,25 +1,60 @@
 <!doctype html>
 <html>
   <head>
-    <title>Google API Example</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="{{ url_for('static', filename='script4.js') }}"></script>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>Google API Example</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+      <script src="{{ url_for('static', filename='script4.js') }}"></script>
   </head>
   <body>
-    <p id="mainHeader"> Select start and end point of destination</p>
-    <input type="text" title="From" id="queryFrom" placeholder="From...">
-    <input type="text" title="To" id="queryTo" placeholder="To..">
-    <button id="search">Search</button>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" id="app-tab" href="#app">Aplikacja
+                <span class="sr-only"></span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="list-tab" href="#list">Lista przystanków</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
-    <p id="errorMessage" style="color:red"></p>
-    <p id="success" style="color:green"></p>
-    <p><a href="" id="url" target="_blank">Click for result!</a></p>
-<div>
-<a href="przystanki.txt" target="_blank">Lista przystankow</a></div>
-</object>
+    <div id="app">
+        <h1 id="mainHeader">Wybierz punkt poczatkowy i koncowy trasy:</h1>
+        <div id="fromToContainer">
+            <label for="queryFrom">Skad:</label>
+            <input type="text" title="From" id="queryFrom" placeholder="Skad...">
+            <label id="queryToLabel" for="queryTo">Dokad:</label>
+            <input type="text" title="To" id="queryTo" placeholder="Dokad..">
+
+            <button id="search" type="submit" class="btn btn-primary btn-lg">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>Analizuj
+            </button>
+        </div>
+
+        <p id="errorMessage"></p>
+        <h3 id="successMessage"></h3>
+        <h6 id="vehicle"></h6>
+        <h6 id="tLength"></h6>
+        <h6 id="path"></h6>
 
 
+    </div>
+    <div id="list">
+         <h1 id="mainHeader">Lista przystankow:</h1>
+        <div id="file-content"></div>
+        <div id="przystanki">
+            <a href="przystanki.txt" target="_blank">Lista przystankow</a>
+        </div>
+    </div>
 
   </body>
 </html>

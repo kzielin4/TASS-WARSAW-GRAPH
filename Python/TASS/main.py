@@ -177,11 +177,11 @@ def getTheBestTransportMode(stopFrom, stopTo):
         print "trans Len: " + str(transitLength)
         print "trans path: " + str(transitPath)
         if(transitLength <= carLength):
-            mode = {"vehicle": "transit", 'length': transitLength, "path": transitPath}
+            mode = {"vehicle": "transport miejski", 'length': transitLength, "path": transitPath}
         else:
-            mode = {"vehicle": "car", 'length': carLength, "path": carPath}
+            mode = {"vehicle": "samochod", 'length': carLength, "path": carPath}
     except nx.NetworkXNoPath:
-        mode = {"vehicle": "car", 'length': carLength, "path": carPath}
+        mode = {"vehicle": "samochod", 'length': carLength, "path": carPath}
         print 'NO PATH'
 
     return mode
@@ -200,6 +200,7 @@ def results():
     # jak nie to zakoncz
     if(str(paramqueryFrom) not in stopsList or str(paramqueryTo) not in stopsList):
         result['error'] = "Punkt poczatkowy oraz koncowy trasy musi znajdowac sie na liscie przystankow!"
+        return jsonify(result)
 
     #analyze graph networkx
     transportMode = getTheBestTransportMode(str(paramqueryFrom), str(paramqueryTo))
@@ -210,7 +211,11 @@ def results():
     print transportMode['path']
     # mode = {"vehicle": "transit", 'length': transitLength, "path": transitPath}
 
-    result['success'] = "success"
+    result['success'] = "Wyniki analizy: "
+    result['vehicle'] = transportMode['vehicle']
+    result['tLength'] = transportMode['length']
+    result['path'] = transportMode['path']
+
     return jsonify(result)
 
 if __name__ ==  "__main__":
