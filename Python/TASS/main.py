@@ -23,8 +23,8 @@ def buidlBasicGraph(stops):
     transitFile.write("*Vertices " + str(len(stops)) + '\n')
     i = 0
     for stop in stops:
-        carFile.write(str(i) + " \"" + stop + "\"\n")
-        transitFile.write(str(i) + " \"" + stop + "\"\n")
+        carFile.write(str(i) + " \"" + stop.lower() + "\"\n")
+        transitFile.write(str(i) + " \"" + stop.lower() + "\"\n")
         i+=1
     carFile.write("*Arcs " + '\n')
     transitFile.write("*Arcs " + '\n')
@@ -115,7 +115,7 @@ def createGraph():
             queryTo = stopsList[i]
             result = {}
             # JESLI TO SAMO TO POMIN
-            if (queryFrom == queryTo):
+            if (queryFrom.lower() == queryTo.lower()):
                 edgeTransit = {}
                 edgeCar = {}
                 continue
@@ -166,14 +166,14 @@ def getTheBestTransportMode(stopFrom, stopTo):
 
     g = nx.read_pajek("carGraph.net")
     gCarD = g.to_directed()
-    carLength, carPath = nx.bidirectional_dijkstra(gCarD, stopFrom, stopTo)
+    carLength, carPath = nx.bidirectional_dijkstra(gCarD, stopFrom.lower(), stopTo.lower())
     print "car Len: " + str(carLength)
     print "car path: " + str(carPath)
 
     g1 = nx.read_pajek("transitGraph.net")
     gTransitD = g1.to_directed()
     try:
-        transitLength, transitPath = nx.bidirectional_dijkstra(gTransitD, stopFrom, stopTo)
+        transitLength, transitPath = nx.bidirectional_dijkstra(gTransitD, stopFrom.lower(), stopTo.lower())
         print "trans Len: " + str(transitLength)
         print "trans path: " + str(transitPath)
         if(transitLength <= carLength):
@@ -198,7 +198,7 @@ def results():
     stopsList = readStops()
     # tu mozna dodac sprawdzenie czy nazwy znajduja sie na listach przystankow
     # jak nie to zakoncz
-    if(str(paramqueryFrom) not in stopsList or str(paramqueryTo) not in stopsList):
+    if(str(paramqueryFrom).lower() not in  map(str.lower,stopsList) or str(paramqueryTo).lower() not in  map(str.lower,stopsList)):
         result['error'] = "Punkt poczatkowy oraz koncowy trasy musi znajdowac sie na liscie przystankow!"
         return jsonify(result)
 
