@@ -34,7 +34,7 @@ $(document).ready(function () {
           $("#app").hide();
     });
 
-})
+});
 
 function capitalize_Words(str)
 {
