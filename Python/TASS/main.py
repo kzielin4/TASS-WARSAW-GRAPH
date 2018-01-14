@@ -3,6 +3,7 @@ import requests
 import time
 import datetime
 import os.path
+import networkx as nx
 
 from key import key_map
 
@@ -16,8 +17,8 @@ def buidlBasicGraph(stops):
     print "buidlBasicGraph";
     #tu podstawowyGrafy - same wierzcholki
     #create carGraph and transitGraph
-    carFile = open('carGraph.txt', 'w')
-    transitFile = open('transitGraph.txt', 'w')
+    carFile = open('carGraph.net', 'w')
+    transitFile = open('transitGraph.net', 'w')
     carFile.write("*Vertices " + str(len(stops)) + '\n')
     transitFile.write("*Vertices " + str(len(stops)) + '\n')
     i = 0
@@ -31,15 +32,14 @@ def buidlBasicGraph(stops):
     transitFile.close()
 
 def addEdgeTograph(edgeCar,edgeTransit, stopFrom, stopTo):
-    print "addEdgeTograph"
     #tu dodajemy krawedz
     if(edgeCar != {}):
-        carFile = open('carGraph.txt', 'a')
+        carFile = open('carGraph.net', 'a')
         carFile.write(str(stopFrom) + " " + str(stopTo) + " " + str(edgeCar['duration']) + '\n')
         carFile.close()
 
     if(edgeTransit != {}):
-        carFile = open('transitGraph.txt', 'a')
+        carFile = open('transitGraph.net', 'a')
         carFile.write(str(stopFrom) + " " + str(stopTo) + " " + str(edgeTransit['duration']) + '\n')
         carFile.close()
 
@@ -144,7 +144,7 @@ def createGraph():
                     else:
                         edgeTransit = {}
 
-                    result['dziala'] = 'success'
+                    result['success'] = "success"
                 else:
                     edgeTransit = {}
                     edgeCar = {}
@@ -161,6 +161,30 @@ def createGraph():
     print "Duration: ", end - start, "\n"
   #  return jsonify(result)
 
+def getTheBestTransportMode(stopFrom, stopTo):
+    mode = {}
+
+    g = nx.read_pajek("carGraph.net")
+    gCarD = g.to_directed()
+    carLength, carPath = nx.bidirectional_dijkstra(gCarD, stopFrom, stopTo)
+    print "car Len: " + str(carLength)
+    print "car path: " + str(carPath)
+
+    g1 = nx.read_pajek("transitGraph.net")
+    gTransitD = g1.to_directed()
+    try:
+        transitLength, transitPath = nx.bidirectional_dijkstra(gTransitD, stopFrom, stopTo)
+        print "trans Len: " + str(transitLength)
+        print "trans path: " + str(transitPath)
+        if(transitLength <= carLength):
+            mode = {"vehicle": "transit", 'length': transitLength, "path": transitPath}
+        else:
+            mode = {"vehicle": "car", 'length': carLength, "path": carPath}
+    except nx.NetworkXNoPath:
+        mode = {"vehicle": "car", 'length': carLength, "path": carPath}
+        print 'NO PATH'
+
+    return mode
 
 @app.route("/", methods=["GET"])
 def retreive():
@@ -168,12 +192,26 @@ def retreive():
 
 @app.route("/sendRequest", methods=['GET'])
 def results():
-	paramqueryFrom = request.args.get('queryFrom')
-	paramqueryTo = request.args.get('queryTo')
+    result = {}
+    paramqueryFrom = request.args.get('queryFrom').encode('utf-8')
+    paramqueryTo = request.args.get('queryTo').encode('utf-8')
+    stopsList = readStops()
     # tu mozna dodac sprawdzenie czy nazwy znajduja sie na listach przystankow
     # jak nie to zakoncz
-    # queryFrom = request.args.get('queryFrom')
-    # queryTo = request.args.get('queryTo')
+    if(str(paramqueryFrom) not in stopsList or str(paramqueryTo) not in stopsList):
+        result['error'] = "Punkt poczatkowy oraz koncowy trasy musi znajdowac sie na liscie przystankow!"
+
+    #analyze graph networkx
+    transportMode = getTheBestTransportMode(str(paramqueryFrom), str(paramqueryTo))
+    print transportMode
+    print "\n--- Wybrano: ---"
+    print transportMode['vehicle']
+    print transportMode['length']
+    print transportMode['path']
+    # mode = {"vehicle": "transit", 'length': transitLength, "path": transitPath}
+
+    result['success'] = "success"
+    return jsonify(result)
 
 if __name__ ==  "__main__":
     createGraph()
