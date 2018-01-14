@@ -14,7 +14,7 @@ details_url = "https://maps.googleapis.com/maps/api/place/details/json"
 directions_url = 'https://maps.googleapis.com/maps/api/directions/json?'
 
 def buidlBasicGraph(stops):
-    print "buidlBasicGraph";
+    print "Building graphs...";
     #tu podstawowyGrafy - same wierzcholki
     #create carGraph and transitGraph
     carFile = open('carGraph.net', 'w')
@@ -44,7 +44,6 @@ def addEdgeTograph(edgeCar,edgeTransit, stopFrom, stopTo):
         carFile.close()
 
 def readStops():
-	print "readStops";
 	file = open('przystanki.txt', 'r')
 	stopsTemp = file.readlines()
 	stops = []
@@ -158,8 +157,8 @@ def createGraph():
             i = i + 1
         j = j + 1
     end = time.time()
+    print "Graphs CREATED!"
     print "Duration: ", end - start, "\n"
-  #  return jsonify(result)
 
 def getTheBestTransportMode(stopFrom, stopTo):
     mode = {}
@@ -209,7 +208,7 @@ def results():
     print transportMode['vehicle']
     print transportMode['length']
     print transportMode['path']
-    # mode = {"vehicle": "transit", 'length': transitLength, "path": transitPath}
+    #format: mode = {"vehicle": "transit", 'length': transitLength, "path": transitPath}
 
     result['success'] = "Wyniki analizy: "
     result['vehicle'] = transportMode['vehicle']
@@ -219,5 +218,6 @@ def results():
     return jsonify(result)
 
 if __name__ ==  "__main__":
-    createGraph()
+    if((checkIsFileExist("transitGraph.net") == False) or (checkIsFileExist("carGraph.net") == False)):
+        createGraph()
     app.run(debug=True)
